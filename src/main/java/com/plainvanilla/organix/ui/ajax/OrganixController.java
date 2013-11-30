@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.plainvanilla.organix.engine.model.Connection;
 import com.plainvanilla.organix.engine.model.ConnectionType;
+import com.plainvanilla.organix.engine.model.ObjectInstance;
 import com.plainvanilla.organix.engine.model.ObjectType;
 import com.plainvanilla.organix.engine.services.DatabaseConfigurationService;
 import com.plainvanilla.organix.engine.services.DatabaseService;
@@ -36,6 +38,55 @@ public class OrganixController {
 	public void setDatabaseConfigurationService(
 			DatabaseConfigurationService databaseConfigurationService) {
 		this.databaseConfigurationService = databaseConfigurationService;
+	}
+	
+	
+	@RequestMapping(value="/objectInstance", method=RequestMethod.GET)
+	public @ResponseBody List<? extends ObjectInstance> getObjectInstances() {
+		return databaseService.getObjectInstances();
+	}
+
+	@RequestMapping(value="/connection", method=RequestMethod.GET)
+	public @ResponseBody List<? extends Connection> getConnections() {
+		return databaseService.getConnectionInstances();
+	}
+	
+	@RequestMapping(value="/objectInstance/{typeId}", method=RequestMethod.GET)
+	public @ResponseBody List<? extends ObjectInstance> getObjectInstances(@PathVariable Integer typeId) {
+		return databaseService.findObjectsByTypeId(typeId);
+	}
+	
+	@RequestMapping(value="/connection/{typeId}", method=RequestMethod.GET)
+	public @ResponseBody List<? extends Connection> getConnections(@PathVariable Integer typeId) {
+		return databaseService.findConnectionsByTypeId(typeId);
+	}
+	
+	@RequestMapping(value="/objectInstance", method=RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody ObjectInstance createObjectInstance(ObjectInstance instance, HttpServletResponse response) {
+
+		//TODO: validation
+		return databaseService.addObjectInstance(instance.getType(), instance.getName());
+	}
+
+	@RequestMapping(value="/connection", method=RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody Connection createConnection(Connection connection, HttpServletResponse response) {
+
+		//TODO: validation
+		return databaseService.addConnection(connection.getType().getTypeNumber(), connection.getSourceObject(), connection.getTargetObject());
+	}
+	
+	@RequestMapping(value="/connection", method=RequestMethod.DELETE)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void removeConnection(Connection instance) {
+		databaseService.removeConnectionById(instance.getId());
+	}
+	
+	@RequestMapping(value="/objectInstance", method=RequestMethod.DELETE)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void removeObjectInstance(ObjectInstance instance) {
+		databaseService.removeObjectInstanceById(instance.getId());
 	}
 	
 	@RequestMapping(value="/objectType", method=RequestMethod.GET)
