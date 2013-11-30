@@ -81,6 +81,13 @@
 			<version>${spring-framework.version}</version>
 		</dependency>
 
+	<!-- Transform to/from JSON -->
+	<dependency>
+		<groupId>org.codehaus.jackson</groupId>
+		<artifactId>jackson-mapper-asl</artifactId>
+		<version>1.9.12</version>
+	</dependency>
+
 		<!-- Logging with SLF4J & LogBack -->
 		<dependency>
 			<groupId>org.slf4j</groupId>

@@ -6,6 +6,10 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
+    
+    	<!-- Scans the classpath of this application for @Components to deploy as beans -->
+	<context:component-scan base-package="com.plainvanilla.organix.ui.ajax" />
+    
     <mvc:annotation-driven />
 
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -13,22 +17,5 @@
 	        <property name="suffix" value=".jsp"/>
 	</bean>
 
-<!-- 	<bean -->
-<!-- 		class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"> -->
-<!-- 	</bean> -->
-	
-<!-- 	<bean -->
-<!--     class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter"> -->
-<!-- </bean> -->
-	
-<!-- 	<bean id="urlMapping" -->
-<!-- 		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping"> -->
-<!-- 		<property name="mappings"> -->
-<!-- 			<value> -->
-<!-- 				/organix.service=databaseService -->
-<!-- 				/organixConfiguration.service=databaseConfigurationService -->
-<!-- 			</value> -->
-<!-- 		</property> -->
-<!-- 	</bean> -->
-
+	    	
 </beans>
