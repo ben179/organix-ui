@@ -41,7 +41,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 
 	<servlet-mapping>
 		<servlet-name>dispatcherServlet</servlet-name>
-		<url-pattern>/</url-pattern>
+		<url-pattern>/organix/*</url-pattern>
 	</servlet-mapping>
 	
 	

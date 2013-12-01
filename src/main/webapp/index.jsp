@@ -2,10 +2,13 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
  
 <!DOCTYPE HTML>
-<html>
+<html ng-app>
   <head>
     <title>Organix Configuration</title>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.3/angular.min.js"></script>
+    <script src="/js/todo.js"></script>
+	<link rel="stylesheet" href="/css/todo.css">
     <style>
       body { background-color: #eee; font: helvetica; }
       #container { width: 500px; background-color: #fff; margin: 30px auto; padding: 30px; border-radius: 5px; box-shadow: 5px; }
@@ -21,8 +24,24 @@
   <div id="container">
    
     <h1>Organix Configuration Page</h1>
-     
-    <h2>All Object Types</h2>
+
+
+		<div ng-controller="TodoCtrl">
+			<span>{{remaining()}} of {{todos.length}} remaining</span> 
+			[ <a href="" ng-click="archive()">archive</a> ]
+			<ul class="unstyled">
+				<li ng-repeat="todo in todos">
+					<input type="checkbox" ng-model="todo.done"> <span class="done-{{todo.done}}">{{todo.text}}</span>
+				</li>
+			</ul>
+			<form ng-submit="addObjectType()">
+				<input type="text" ng-model="typeName" size="30" placeholder="ObjectType name" /> 
+				<input type="text" ng-model="typeNumber" size="20" placeholder="ObjectType number"/> 
+				<input class="btn-primary" type="submit" value="Add new ObjectType">
+			</form>
+		</div>
+
+		<h2>All Object Types</h2>
     <input type="submit" id="randomPerson" value="All Object Types" /><br/><br/>
     <div id="getAllObjectTypesResponse"> </div>
      
