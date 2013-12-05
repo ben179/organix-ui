@@ -7,7 +7,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,7 +25,6 @@ import com.plainvanilla.organix.engine.services.DatabaseService;
 
 
 @Controller
-@RequestMapping(value="/organix")
 public class OrganixController {
 
 	
@@ -99,11 +101,9 @@ public class OrganixController {
 		return databaseConfigurationService.getObjectType(id);
 	}
 	
-	@RequestMapping(value="/objectType", method=RequestMethod.POST)
+	@RequestMapping(value="/objectType", method=RequestMethod.POST, produces = {"application/json"}, consumes = {"application/json"})
 	@ResponseStatus(HttpStatus.CREATED)
-	public @ResponseBody ObjectType createObjectType(ObjectType type, HttpServletResponse response) {
-		
-		// TODO: validation
+	public @ResponseBody ObjectType createObjectType(@RequestBody @Validated ObjectType type, HttpServletResponse response) {
 		return databaseConfigurationService.addObjectType(type.getTypeNumber(), type.getName());
 	}
 	
@@ -118,11 +118,9 @@ public class OrganixController {
 	}	
 	
 	
-	@RequestMapping(value="/connectionType", method=RequestMethod.POST)
+	@RequestMapping(value="/connectionType", method=RequestMethod.POST, produces = {"application/json"}, consumes = {"application/json"})
 	@ResponseStatus(HttpStatus.CREATED)
-	public @ResponseBody ConnectionType createConnectionType(ConnectionType type, HttpServletResponse response) {
-		
-		// TODO: validation
+	public @ResponseBody ConnectionType createConnectionType(@RequestBody @Validated ConnectionType type, HttpServletResponse response) {
 		return databaseConfigurationService.addConnectionType(type.getTypeNumber(), type.getSourceEnd().getRoleName(), type.getSourceEnd().getObjectType(), type.getSourceEnd().getUnique(), type.getSourceEnd().getMandatory(), type.getTargetEnd().getRoleName(), type.getTargetEnd().getObjectType(), type.getTargetEnd().getUnique(), type.getTargetEnd().getMandatory());
 	}
 	

@@ -1,0 +1,106 @@
+ <h2 align="right">Object Types</h2>
+<div>
+	Search : <input ng-model="objectQuery" /> Sort by : <select
+		ng-model="orderPropObject">
+		<option value="name">Type name</option>
+		<option value="typeNumber">Type number</option>
+	</select>
+	<ul>
+		<li
+			ng-repeat="objectType in objectTypes | filter:objectQuery | orderBy:orderPropObject">
+			<input type="checkbox" ng-model="objectType.chosen" /> 
+			<span>{{objectType.name}}
+				({{objectType.typeNumber}}), dbId: {{objectType.id}}, chosen: {{objectType.chosen | checkmark}}</span>
+			<a href="#/configuration/objectTypes/{{objectType.typeNumber}}">Details..</a>	
+		</li>
+	</ul>
+
+	<hr class="dotted"/>
+	<form ng-submit="addObjectType(objectType)">
+		<b>New Type </b>
+		<input type="text" ng-model="objectType.name" size="25"
+			placeholder="Type name" /> 
+		<b>Type Id </b>
+		<input type="text"
+			ng-model="objectType.typeNumber" size="20" placeholder="Autodetect.." />
+		<input type="submit" value="Add Type">
+	</form>
+	<p>{{objectErrorMessage}}</p>
+	<!-- 			{{ objectTypes | json }} -->
+</div>
+
+<hr/>
+
+ <h2 align="right">Connection Types</h2>
+<div>
+	Search : <input ng-model="connectionQuery" /> 
+	Sort by : <select
+		ng-model="orderPropConnection">
+		<option value="typeNumber">Type number</option>
+		<option value="sourceEnd.roleName">Source Role Name</option>
+		<option value="sourceEnd.objectType">Source Object Type</option>
+		<option value="sourceEnd.mandatory">Source Mandatory</option>
+		<option value="sourceEnd.unique">Source Unique</option>
+		<option value="targetEnd.roleName">Target Role Name</option>
+		<option value="targetEnd.objectType">Target Object Type</option>
+		<option value="targetEnd.mandatory">Target Mandatory</option>
+		<option value="targetEnd.unique">Target Unique</option>
+	</select>
+	<ul>
+		<li
+			ng-repeat="connectionType in connectionTypes | orderBy:orderPropConnection | filter:connectionQuery">
+			<input type="checkbox" ng-model="connectionType.chosen" /> <span>
+				{{connectionType.sourceEnd.roleName}}
+				[{{connectionType.sourceEnd.objectType}}]
+				 / 
+				{{connectionType.targetEnd.roleName}}
+				[{{connectionType.targetEnd.objectType}}]  
+				({{connectionType.typeNumber}}), dbId: {{connectionType.id}}, 
+				{{connectionType.sourceEnd.mandatory | checkmark}}
+				{{connectionType.targetEnd.mandatory | checkmark}}
+				{{connectionType.sourceEnd.unique | checkmark}}
+				{{connectionType.targetEnd.unique | checkmark}}
+				</span>
+			<a href="#/configuration/connectionTypes/{{connectionType.typeNumber}}">Details..</a>	
+		</li>
+	</ul>
+
+	<hr class="dotted"/>
+	<form ng-submit="addConnectionType(connectionType)">
+
+		<b>New Type Id </b> 
+		<input type="text" ng-model="connectionType.typeNumber" size="20" placeholder="Autodetect.." />
+		<input type="submit" value="Add Type">
+		<p>		
+			<b>Source Endpoint:</b>
+			<input type="checkbox" ng-model="connectionType.sourceEnd.mandatory">Mandatory</input> 
+			<input type="checkbox" ng-model="connectionType.sourceEnd.unique">Unique</input>
+		</p>
+		<p>
+			<input type="text" ng-model="connectionType.sourceEnd.roleName"
+				placeholder="Active role name" size="30" /> <select
+				ng-model="connectionType.sourceEnd.objectType"
+				ng-options="type.typeNumber as type.name for type in objectTypes">
+				<option value="">-- Source Object Type --</option>
+			</select>
+		</p>
+
+		<p>
+			<b>Target Endpoint:</b>
+			<input type="checkbox" ng-model="connectionType.targetEnd.mandatory">Mandatory</input>
+			<input type="checkbox" ng-model="connectionType.targetEnd.unique">Unique</input>		
+		</p>
+		<p>
+			<input type="text" ng-model="connectionType.targetEnd.roleName"
+				placeholder="Passive role name" size="30" /> <select
+				ng-model="connectionType.targetEnd.objectType"
+				ng-options="type.typeNumber as type.name for type in objectTypes">
+				<option value="">-- Target Object Type --</option>
+			</select>
+		</p>
+
+
+	</form>
+	<p>{{connectionErrorMessage}}</p>
+	<!-- 			{{ objectTypes | json }} -->
+</div>
