@@ -5,7 +5,9 @@ organixControllers.controller('ConfigurationCtrl', function($scope, $http) {
 	$scope.objectTypes = [];
 	$scope.connectionTypes = [];
 	$scope.orderPropObject = 'typeNumber';
+	$scope.reversePropObject = false;
 	$scope.orderPropConnection = 'typeNumber';
+	$scope.reversePropConnection = false;
 	
 	$http.get('/organix/objectType/').success(function(data) {
 		$scope.objectTypes = data;
@@ -42,17 +44,10 @@ organixControllers.controller('ConfigurationCtrl', function($scope, $http) {
 		$http.post('/organix/connectionType/', connectionType).
 				success(function(data) {
 					data.chosen = false;
-					$scope.connectionTypes.push(data);
-					connectionType.typeNumber='';	
-					connectionType.sourceEnd.mandatory = false;
-					connectionType.sourceEnd.unique = false;
-					connectionType.sourceEnd.objectType = '';
-					connectionType.sourceEnd.roleName = '';
-					connectionType.targetEnd.mandatory = false;
-					connectionType.targetEnd.unique = false;
-					connectionType.targetEnd.objectType = '';
-					connectionType.targetEnd.roleName = '';					
+					$scope.connectionTypes.push(data);					
 					$scope.connectionErrorMessage = '';
+					$scope.cleanConnectionType();
+					$scope.typeToDeriveFrom = {};
 				}).error(function(data,status,header,config){
 					if (409 == status) {
 						$scope.connectionErrorMessage = data.organixModelErrorMessage;
@@ -63,6 +58,35 @@ organixControllers.controller('ConfigurationCtrl', function($scope, $http) {
 					}
 				});
 
+	};
+	
+	$scope.deriveConnectionType = function(typeToDeriveFrom) {
+
+		if (typeToDeriveFrom != null) {
+			$scope.connectionType.sourceEnd.objectType = typeToDeriveFrom.sourceEnd.objectType;
+			$scope.connectionType.sourceEnd.roleName = typeToDeriveFrom.sourceEnd.roleName;
+			$scope.connectionType.sourceEnd.mandatory = typeToDeriveFrom.sourceEnd.mandatory;
+			$scope.connectionType.sourceEnd.unique = typeToDeriveFrom.sourceEnd.unique;
+			
+			$scope.connectionType.targetEnd.objectType = typeToDeriveFrom.targetEnd.objectType;
+			$scope.connectionType.targetEnd.roleName = typeToDeriveFrom.targetEnd.roleName;
+			$scope.connectionType.targetEnd.mandatory = typeToDeriveFrom.targetEnd.mandatory;
+			$scope.connectionType.targetEnd.unique = typeToDeriveFrom.targetEnd.unique;			
+		} else {
+			$scope.cleanConnectionType();
+		}
+	};
+	
+	$scope.cleanConnectionType = function() {
+		$scope.connectionType.typeNumber='';	
+		$scope.connectionType.sourceEnd.mandatory = false;
+		$scope.connectionType.sourceEnd.unique = false;
+		$scope.connectionType.sourceEnd.objectType = '';
+		$scope.connectionType.sourceEnd.roleName = '';
+		$scope.connectionType.targetEnd.mandatory = false;
+		$scope.connectionType.targetEnd.unique = false;
+		$scope.connectionType.targetEnd.objectType = '';
+		$scope.connectionType.targetEnd.roleName = '';	
 	};
 	
 });

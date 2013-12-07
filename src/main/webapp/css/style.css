@@ -3,8 +3,11 @@ body {
 	font: helvetica;
 }
 
+th { cursor: pointer; }
+td { cursor: pointer; }
+
 #container {
-	width: 550px;
+	width: 600px;
 	background-color: #fff;
 	margin: 30px auto;
 	padding: 30px;

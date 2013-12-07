@@ -91,10 +91,7 @@ public class OrganixController {
 		databaseService.removeObjectInstanceById(instance.getId());
 	}
 	
-	@RequestMapping(value="/objectType", method=RequestMethod.GET)
-	public @ResponseBody List<? extends ObjectType> getObjectTypes(HttpServletResponse response) {
-		return databaseConfigurationService.getObjectTypes();
-	}
+	
 
 	@RequestMapping(value="/objectType/{id}", method=RequestMethod.GET)
 	public @ResponseBody ObjectType getObjectType(@PathVariable Integer id) {
@@ -106,11 +103,7 @@ public class OrganixController {
 	public @ResponseBody ObjectType createObjectType(@RequestBody @Validated ObjectType type, HttpServletResponse response) {
 		return databaseConfigurationService.addObjectType(type.getTypeNumber(), type.getName());
 	}
-	
-	@RequestMapping(value="/connectionType", method=RequestMethod.GET)
-	public @ResponseBody List<? extends ConnectionType> getConnectionTypes(HttpServletResponse response) {
-		return databaseConfigurationService.getConnectionTypes();
-	}
+
 	
 	@RequestMapping(value="/connectionType/{id}", method=RequestMethod.GET)
 	public @ResponseBody ConnectionType getConnectionType(@PathVariable Integer id) {
