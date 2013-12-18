@@ -33,6 +33,6 @@
 	<bean name="databaseConfigurationServiceExporter"
 		class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter"
 		p:service-ref="databaseConfigurationService"
-		p:serviceInterface="com.plainvanilla.organix.engine.services.DatabaseConfigurationService" />
+		p:serviceInterface="com.plainvanilla.organix.engine.services.ConfigurationService" />
 
 </beans>

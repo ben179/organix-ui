@@ -1,4 +1,7 @@
- <h3 align="right">Object Types</h3>
+<p align="right">Configuration url: <a href="{{configurationUrl}}" type="application/json" target="_blank">{{configurationUrl}}</a></p>
+<!-- <p align="right">Database url: {{databaseUrl}}</p> -->
+<hr class="dotted"/>
+<h3 align="right">Object Types</h3>
 <div width="100%">
 	<p width="100%" align="right">
 		<input ng-model="objectQuery" placeholder="Search.." size="35"/> 
@@ -9,16 +12,14 @@
 			<th ng-click="orderPropObject = 'chosen'; reversePropObject = !reversePropObject">{{reversePropObject | updown}}</th>
 			<th ng-click="orderPropObject = 'name'; reversePropObject = !reversePropObject">Type Name {{reversePropObject | updown}}</th>
 			<th ng-click="orderPropObject = 'typeNumber'; reversePropObject = !reversePropObject">Type Id {{reversePropObject | updown}}</th>
-			<th ng-click="orderPropObject = 'id'; reversePropObject = !reversePropObject">Db Id {{reversePropObject | updown}}</th>
 			<th>Details</th>
 		</tr>
 		<tr
-			ng-repeat="objectType in objectTypes | filter:objectQuery | orderBy:orderPropObject:reversePropObject">
+			ng-repeat="objectType in configuration.objectTypes | filter:objectQuery | orderBy:orderPropObject:reversePropObject">
 			<td><input type="checkbox" ng-model="objectType.chosen" /></td> 
 			<td>{{objectType.name}}</td>
 			<td>{{objectType.typeNumber}}</td>
-			<td>{{objectType.id}}</td> 
-			<td><a href="#/configuration/objectTypes/{{objectType.typeNumber}}">Details..</a></td>	
+			<td><a href="#/ui/configuration/objectTypes/{{objectType.typeNumber}}">Details..</a></td>	
 		</tr>
 	</table>
 </div>
@@ -60,7 +61,7 @@
 			<th ng-click="orderPropObject = 'targetEnd.unique'; reversePropConnection = !reversePropConnection">U {{reversePropConnection | updown}}</th>			
 		</tr>
 		
-		<tr	ng-repeat="connectionType in connectionTypes | orderBy:orderPropConnection:reversePropConnection | filter:connectionQuery">
+		<tr	ng-repeat="connectionType in configuration.connectionTypes | orderBy:orderPropConnection:reversePropConnection | filter:connectionQuery">
 			<td><input type="checkbox" ng-model="connectionType.chosen" /> </td>
 			<td>{{connectionType.typeNumber}}</td>
 			
@@ -86,7 +87,7 @@
 		<select
 				ng-change="deriveConnectionType(typeToDeriveFrom);"
 				ng-model="typeToDeriveFrom"
-				ng-options="type as type.sourceEnd.roleName for type in connectionTypes">
+				ng-options="type as type.sourceEnd.roleName for type in configuration.connectionTypes">
 				<option value=""> -- Derive from -- </option>
 		</select>
 				
@@ -95,7 +96,7 @@
 		<p>
  			<select
 				ng-model="connectionType.sourceEnd.objectType"
-				ng-options="type.typeNumber as type.name for type in objectTypes" >
+				ng-options="type.typeNumber as type.name for type in configuration.objectTypes" >
 				<option value=""> -- Source Object Type -- </option>
 			</select>
 			<input type="text" ng-model="connectionType.sourceEnd.roleName"
@@ -105,7 +106,7 @@
 		</p>
 		<p>
 			<select	ng-model="connectionType.targetEnd.objectType"
-				ng-options="type.typeNumber as type.name for type in objectTypes">
+				ng-options="type.typeNumber as type.name for type in configuration.objectTypes">
 				<option value=""> -- Target Object Type -- </option>
 			</select>
 			<input type="text" ng-model="connectionType.targetEnd.roleName"

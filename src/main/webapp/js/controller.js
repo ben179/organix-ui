@@ -1,29 +1,34 @@
 var organixControllers = angular.module('organixControllers', []);
 
 organixControllers.controller('ConfigurationCtrl', function($scope, $http) {
-
-	$scope.objectTypes = [];
-	$scope.connectionTypes = [];
+	
+	$scope.configuration = {};
+	$scope.configurationUrl = '';
 	$scope.orderPropObject = 'typeNumber';
 	$scope.reversePropObject = false;
 	$scope.orderPropConnection = 'typeNumber';
 	$scope.reversePropConnection = false;
+
+	$http({
+		method: 'POST',
+		url: '/organix/configuration',
+		data: 'name=config1',		
+		headers: {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'} 	
+	}).success(function(data) {
+		$scope.configuration = data;
+		$scope.configurationUrl = '/organix/configuration/' + $scope.configuration.id;
 	
-	$http.get('/organix/objectType/').success(function(data) {
-		$scope.objectTypes = data;
 	});
 	
-	$http.get('/organix/connectionType/').success(function(data) {
-		$scope.connectionTypes = data;
-	});
-	
+
+
 	
 	$scope.addObjectType = function(objectType) {    	
 		
-		$http.post('/organix/objectType/', objectType).
+		$http.post($scope.configurationUrl + '/objectType/', objectType).
 				success(function(data) {
 					data.chosen = false;
-					$scope.objectTypes.push(data);
+					$scope.configuration.objectTypes.push(data);
 					objectType.name='';
 					objectType.typeNumber='';	
 					$scope.objectErrorMessage = '';
@@ -41,10 +46,10 @@ organixControllers.controller('ConfigurationCtrl', function($scope, $http) {
 
 	$scope.addConnectionType = function(connectionType) {    	
 		
-		$http.post('/organix/connectionType/', connectionType).
+		$http.post($scope.configurationUrl + '/connectionType/', connectionType).
 				success(function(data) {
 					data.chosen = false;
-					$scope.connectionTypes.push(data);					
+					$scope.configuration.connectionTypes.push(data);					
 					$scope.connectionErrorMessage = '';
 					$scope.cleanConnectionType();
 					$scope.typeToDeriveFrom = {};
