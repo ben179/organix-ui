@@ -1,4 +1,4 @@
-package com.plainvanilla.organix.ui.ajax;
+package com.plainvanilla.organix.ui.json;
 
 import java.util.Date;
 import java.util.Set;
@@ -10,7 +10,7 @@ import com.plainvanilla.organix.engine.model.ConnectionType;
 import com.plainvanilla.organix.engine.model.Database;
 import com.plainvanilla.organix.engine.model.ObjectType;
 
-class ConfigurationMixIn {
+public class ConfigurationMixIn {
 
 	@JsonProperty Long id;
 	@JsonProperty Date configurationDate;
@@ -19,5 +19,5 @@ class ConfigurationMixIn {
 	@JsonProperty Integer version;
 	@JsonProperty Set<ConnectionType> connectionTypes;
 	@JsonProperty Set<ObjectType> objectTypes;
-	@JsonProperty Set<Database> databases;	
+	@JsonIgnore Set<Database> databases;	
 }

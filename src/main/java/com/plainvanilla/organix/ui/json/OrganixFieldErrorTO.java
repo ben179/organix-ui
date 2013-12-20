@@ -1,4 +1,4 @@
-package com.plainvanilla.organix.ui.ajax;
+package com.plainvanilla.organix.ui.json;
 
 public class OrganixFieldErrorTO {
 

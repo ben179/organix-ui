@@ -1,4 +1,12 @@
-<p align="right">Configuration url: <a href="{{configurationUrl}}" type="application/json" target="_blank">{{configurationUrl}}</a></p>
+<p align="left">
+<!-- 	<input ng-model="importConfiguration" placeholder="Select configuration file" size="35"/>  -->
+		<p width="100%" style="float:none">
+	<form ng-submit="uploadConfiguration()">
+		<a href="{{configurationUrl}}/file" type="application/json" target="_blank">{{configurationUrl}}</a>
+		<input type="submit" value="Upload Congfiguration" />
+	</form>
+	
+</p>
 <!-- <p align="right">Database url: {{databaseUrl}}</p> -->
 <hr class="dotted"/>
 <h3 align="right">Object Types</h3>

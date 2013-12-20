@@ -15,20 +15,32 @@ organixControllers.controller('ConfigurationCtrl', function($scope, $http) {
 		data: 'name=config1',		
 		headers: {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'} 	
 	}).success(function(data) {
-		$scope.configuration = data;
+		$scope.configuration = data.configuration;
 		$scope.configurationUrl = '/organix/configuration/' + $scope.configuration.id;
 	
 	});
 	
 
-
+	$scope.uploadConfiguration = function() {
+		
+		$http({
+			method: 'POST',
+			url: '/organix/configuration',
+			data: angular.toJson($scope.configuration),
+			headers: {'Content-Type': 'application/json'}
+		}).success(function(data){
+			$scope.configuration = data.configuration;
+			$scope.configurationUrl = '/organix/configuration/' + $scope.configuration.id;
+		});
+				
+	};
 	
 	$scope.addObjectType = function(objectType) {    	
 		
 		$http.post($scope.configurationUrl + '/objectType/', objectType).
 				success(function(data) {
 					data.chosen = false;
-					$scope.configuration.objectTypes.push(data);
+					$scope.configuration.objectTypes.push(data.objectType);
 					objectType.name='';
 					objectType.typeNumber='';	
 					$scope.objectErrorMessage = '';
@@ -49,7 +61,7 @@ organixControllers.controller('ConfigurationCtrl', function($scope, $http) {
 		$http.post($scope.configurationUrl + '/connectionType/', connectionType).
 				success(function(data) {
 					data.chosen = false;
-					$scope.configuration.connectionTypes.push(data);					
+					$scope.configuration.connectionTypes.push(data.connectionType);					
 					$scope.connectionErrorMessage = '';
 					$scope.cleanConnectionType();
 					$scope.typeToDeriveFrom = {};
