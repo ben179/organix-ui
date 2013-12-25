@@ -98,10 +98,12 @@
 				ng-options="type as type.sourceEnd.roleName for type in configuration.connectionTypes">
 				<option value=""> -- Derive from -- </option>
 		</select>
-				
 		<input type="submit" value="Add Type">
-		
 		<p>
+		<span style="float:left; cursor: pointer;" ng-click="switchSourceAndTargetTypes();">
+			<img src="/img/switch-arrow.png" alt="Switch source and target type" />
+		</span>
+		<span>
  			<select
 				ng-model="connectionType.sourceEnd.objectType"
 				ng-options="type.typeNumber as type.name for type in configuration.objectTypes" >
@@ -111,8 +113,8 @@
 				placeholder="Active role name" size="30" />
 			<input type="checkbox" ng-model="connectionType.sourceEnd.mandatory">Mandatory</input> 
 			<input type="checkbox" ng-model="connectionType.sourceEnd.unique">Unique</input>
-		</p>
-		<p>
+		</span>
+		<span style="margin-top:10px">
 			<select	ng-model="connectionType.targetEnd.objectType"
 				ng-options="type.typeNumber as type.name for type in configuration.objectTypes">
 				<option value=""> -- Target Object Type -- </option>
@@ -121,8 +123,7 @@
 				placeholder="Passive role name" size="30" /> 
 			<input type="checkbox" ng-model="connectionType.targetEnd.mandatory">Mandatory</input>
 			<input type="checkbox" ng-model="connectionType.targetEnd.unique">Unique</input>
-		</p>
-
+		</span>
 
 	</form>
 	<p>{{connectionErrorMessage}}</p>

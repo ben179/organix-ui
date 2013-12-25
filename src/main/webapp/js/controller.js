@@ -106,6 +106,12 @@ organixControllers.controller('ConfigurationCtrl', function($scope, $http) {
 		$scope.connectionType.targetEnd.roleName = '';	
 	};
 	
+	$scope.switchSourceAndTargetTypes = function() {
+		var type = $scope.connectionType.targetEnd.objectType;
+		$scope.connectionType.targetEnd.objectType = $scope.connectionType.sourceEnd.objectType;
+		$scope.connectionType.sourceEnd.objectType = type;
+	}
+	
 });
 
 
