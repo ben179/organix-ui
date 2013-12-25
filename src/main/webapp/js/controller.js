@@ -2,6 +2,11 @@ var organixControllers = angular.module('organixControllers', []);
 
 organixControllers.controller('ConfigurationCtrl', function($scope, $http) {
 	
+	$scope.newConfiguration = {};
+	$scope.newConfiguration.version = 1;
+	$scope.configurationsHeaders = null;
+	$scope.configurationsExist = false;
+	$scope.currentConfigurationHeader = null;
 	$scope.configuration = {};
 	$scope.configurationUrl = '';
 	$scope.orderPropObject = 'typeNumber';
@@ -9,28 +14,35 @@ organixControllers.controller('ConfigurationCtrl', function($scope, $http) {
 	$scope.orderPropConnection = 'typeNumber';
 	$scope.reversePropConnection = false;
 
-	$http({
-		method: 'POST',
-		url: '/organix/configuration',
-		data: 'name=config1',		
-		headers: {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'} 	
-	}).success(function(data) {
-		$scope.configuration = data.configuration;
-		$scope.configurationUrl = '/organix/configuration/' + $scope.configuration.id;
 	
-	});
-	
+	$scope.loadConfigHeaders = function() {
+		
+		$http({
+			method: 'GET',
+			url: '/organix/configuration',
+			data: 'headersOnly=true',
+			headers: {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'} 
+		}).success(function(data) {
+			$scope.configurationHeaders = data.configurationList;
+			$scope.configurationsExist = data.configurationList.length > 0;
+			$scope.newConfiguration = {};			
+			$scope.newConfiguration.version = 1;
+		});
+		
+	};
 
-	$scope.uploadConfiguration = function() {
+	$scope.uploadConfiguration = function(configuration) {
 		
 		$http({
 			method: 'POST',
 			url: '/organix/configuration',
-			data: angular.toJson($scope.configuration),
+			data: angular.toJson(configuration),
 			headers: {'Content-Type': 'application/json'}
 		}).success(function(data){
 			$scope.configuration = data.configuration;
 			$scope.configurationUrl = '/organix/configuration/' + $scope.configuration.id;
+			$scope.loadConfigHeaders();
+			$scope.currentConfigurationHeader = data.configuration.id;
 		});
 				
 	};
@@ -110,7 +122,23 @@ organixControllers.controller('ConfigurationCtrl', function($scope, $http) {
 		var type = $scope.connectionType.targetEnd.objectType;
 		$scope.connectionType.targetEnd.objectType = $scope.connectionType.sourceEnd.objectType;
 		$scope.connectionType.sourceEnd.objectType = type;
-	}
+	};
+	
+	$scope.loadConfiguration = function() {
+
+		$http({
+			method: 'GET',
+			url: '/organix/configuration/' + $scope.currentConfigurationHeader,
+			data: 'headersOnly=true',
+			headers: {'Content-Type':'application/x-www-form-urlencoded'} 
+		}).success(function(data) {
+			$scope.configuration = data.configuration;
+			$scope.configurationUrl = '/organix/configuration/' + data.configuration.id;
+		});
+	};
+
+	
+	$scope.loadConfigHeaders();
 	
 });
 

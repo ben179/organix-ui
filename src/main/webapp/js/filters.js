@@ -7,6 +7,13 @@ organixFilters.filter('checkmark', function() {
 	};
 });
 
+
+organixFilters.filter('nullFilter', function() {
+	return function(input) {
+		return input ? input : '\u2718';
+	};
+});
+
 organixFilters.filter('updown', function() {
 	return function(input) {
 		return input ? '\u2B06' : '\u2B07';

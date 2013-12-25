@@ -26,7 +26,13 @@
 		<h1>Organix Configuration Page</h1>
 
 		<hr />
-		<div ng-view></div>
+		<div class="spinner" id="spinner">
+			<h1 align="center">Loading...</h1>
+		</div>
+		<div class="serverContent">
+			<div ng-view >
+			</div>
+		</div>
 	</div>
 
 </body>

@@ -1,14 +1,35 @@
-<p align="left">
-<!-- 	<input ng-model="importConfiguration" placeholder="Select configuration file" size="35"/>  -->
-		<p width="100%" style="float:none">
-	<form ng-submit="uploadConfiguration()">
-		<a href="{{configurationUrl}}/file" type="application/json" target="_blank">{{configurationUrl}}</a>
-		<input type="submit" value="Upload Congfiguration" />
+	<p width="100%" style="float:none">
+	<form ng-submit="uploadConfiguration(newConfiguration)">
+		<input type="text" ng-model="newConfiguration.name" size="35"
+			placeholder="New Configuration Name" /> 
+		<input type="submit" value="Create Configuration">
 	</form>
+	</p>
+<hr class="dotted" />
+<div ng-show="configurationsExist">
+<h3 align="right">Configuration</h3>
+	<p width="100%" align="right">
+	<a href="{{configurationUrl}}/file" type="application/json" target="_blank">
+		<img src="/img/download.png" alt="Download Config"/>
+	</a>
+	<select	style="width: 230px" 
+			ng-change="loadConfiguration()"
+			ng-model="currentConfigurationHeader"
+			ng-options="header.id as header.name for header in configurationHeaders">
 	
+	</select>
+
+
+		
 </p>
-<!-- <p align="right">Database url: {{databaseUrl}}</p> -->
+
+<p align="right">
+	<input ng-click="uploadConfiguration(configuration)" type="submit" value="Upload Config" />
+	<input ng-click="uploadConfiguration(configuration)" type="submit" value="Reload Config" />
+	<input ng-click="uploadConfiguration(configuration)" type="submit" value="Delete Config" />
+</p>
 <hr class="dotted"/>
+
 <h3 align="right">Object Types</h3>
 <div width="100%">
 	<p width="100%" align="right">
@@ -83,7 +104,6 @@
 			<td>{{connectionType.targetEnd.mandatory | checkmark}}</td>		 
 			<td>{{connectionType.targetEnd.unique | checkmark}}</td>			
 
-<!-- 			<td><a href="#/configuration/connectionTypes/{{connectionType.typeNumber}}">Details..</a></td>	 -->
 		</tr>
 	</table>
 
@@ -127,5 +147,6 @@
 
 	</form>
 	<p>{{connectionErrorMessage}}</p>
-	<!-- 			{{ objectTypes | json }} -->
+</div>
+
 </div>

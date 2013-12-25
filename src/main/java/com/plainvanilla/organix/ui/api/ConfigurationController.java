@@ -46,6 +46,13 @@ public class ConfigurationController {
 		this.configurationService = configurationService;
 	}
 
+	@RequestMapping(method=RequestMethod.GET, produces = {"application/json"}, consumes = {"application/x-www-form-urlencoded"})
+	public View getAllConfigurations(@RequestParam(required=false) boolean headersOnly, Model model) {
+		List<Configuration> configurations = configurationService.getAllConfigurations(headersOnly);
+		model.addAttribute(configurations);
+		return configurationView;
+	}
+	
 	@RequestMapping(value="/{configId}/objectType/{id}", method=RequestMethod.GET)
 	public View getObjectType(@PathVariable Long configId, @PathVariable Integer id, Model model) {
 		ObjectType type = configurationService.getObjectType(id, configId);
@@ -76,9 +83,11 @@ public class ConfigurationController {
 	}	
 	
 	
-	@RequestMapping(value="/{configId}", method=RequestMethod.GET, produces = {"application/json"}, consumes = {"application/json"})
-	public @ResponseBody Configuration createConfiguration(@PathVariable Long configId) {
-		return configurationService.getConfiguration(configId);
+	@RequestMapping(value="/{configId}", method=RequestMethod.GET, produces = {"application/json"}, consumes = {"application/x-www-form-urlencoded"})
+	public View getConfiguration(@PathVariable Long configId, Model model) {
+		Configuration config = configurationService.getConfiguration(configId);
+		model.addAttribute(config);
+		return configurationView;
 	}
 
 	@RequestMapping(value="/{configId}/file", method=RequestMethod.GET)
