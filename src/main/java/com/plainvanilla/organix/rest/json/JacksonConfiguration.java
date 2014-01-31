@@ -1,4 +1,4 @@
-package com.plainvanilla.organix.ui.json;
+package com.plainvanilla.organix.rest.json;
 
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;

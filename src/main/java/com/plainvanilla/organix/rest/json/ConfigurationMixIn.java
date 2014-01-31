@@ -1,4 +1,4 @@
-package com.plainvanilla.organix.ui.json;
+package com.plainvanilla.organix.rest.json;
 
 import java.util.Date;
 import java.util.Set;

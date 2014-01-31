@@ -1,4 +1,4 @@
-package com.plainvanilla.organix.ui.api;
+package com.plainvanilla.organix.rest.controller;
 
 import java.util.List;
 

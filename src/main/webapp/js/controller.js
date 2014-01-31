@@ -156,12 +156,22 @@ organixControllers.controller('ConfigurationCtrl', function($scope, $http) {
 	$scope.addObjectType = function(objectType) {    	
 		
 		$http.post($scope.configurationUrl + '/objectType/', objectType).
-				success(function(data) {
-					data.chosen = false;
-					$scope.configuration.objectTypes.push(data.objectType);
-					objectType.name='';
-					objectType.typeNumber='';	
-					$scope.objectErrorMessage = '';
+				success(function(data, status, headers, config) {
+					
+					$http({
+						method: 'GET',
+						url: headers('Location'),
+						data: '',
+						headers: {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8', 'Accept': 'application/json;q=1.0, */*;q=0.0'} 
+					}).success(function(newObjectType){
+						newObjectType.chosen = false;
+						$scope.configuration.objectTypes.push(newObjectType);
+						objectType.name='';
+						objectType.typeNumber='';	
+						$scope.objectErrorMessage = '';
+						
+					}); 					
+
 				}).error(function(data,status,header,config){
 					if (409 == status) {
 						$scope.objectErrorMessage = data.organixModelErrorMessage;
@@ -179,7 +189,7 @@ organixControllers.controller('ConfigurationCtrl', function($scope, $http) {
 		$http.post($scope.configurationUrl + '/connectionType/', connectionType).
 				success(function(data) {
 					data.chosen = false;
-					$scope.configuration.connectionTypes.push(data.connectionType);					
+					$scope.configuration.connectionTypes.push(data);					
 					$scope.connectionErrorMessage = '';
 					$scope.cleanConnectionType();
 					$scope.typeToDeriveFrom = {};

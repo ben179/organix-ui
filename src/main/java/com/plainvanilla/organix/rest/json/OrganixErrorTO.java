@@ -1,4 +1,4 @@
-package com.plainvanilla.organix.ui.json;
+package com.plainvanilla.organix.rest.json;
 
 import java.util.ArrayList;
 import java.util.List;

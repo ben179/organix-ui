@@ -1,4 +1,4 @@
-package com.plainvanilla.organix.ui.api;
+package com.plainvanilla.organix.rest.controller;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.plainvanilla.organix.engine.model.exception.OrganixModelException;
-import com.plainvanilla.organix.ui.json.OrganixErrorTO;
+import com.plainvanilla.organix.rest.json.OrganixErrorTO;
 
 @ControllerAdvice
 public class RestErrorHandler {
