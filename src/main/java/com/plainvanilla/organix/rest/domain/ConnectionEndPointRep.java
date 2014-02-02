@@ -2,11 +2,9 @@ package com.plainvanilla.organix.rest.domain;
 
 import java.io.Serializable;
 
-import org.springframework.hateoas.ResourceSupport;
-
 import com.plainvanilla.organix.engine.model.ConnectionEndpoint;
 
-public class ConnectionEndPointRep extends ResourceSupport implements Serializable {
+public class ConnectionEndPointRep extends OrganixRep<ConnectionEndpoint> implements Serializable {
 
 	private static final long serialVersionUID = 4L;
 
@@ -20,19 +18,13 @@ public class ConnectionEndPointRep extends ResourceSupport implements Serializab
 	}
 	
 	public ConnectionEndPointRep(ConnectionEndpoint point) {
-		fromConnectionEndPoint(point);
+		fromEntity(point);
 	}
 	
-	public void fromConnectionEndPoint(ConnectionEndpoint endpoint) {
-		mandatory = endpoint.getMandatory();
-		unique = endpoint.getUnique();
-		objectType = endpoint.getObjectType();
-		roleName = endpoint.getRoleName();
-	}
-	
-	
-	public ConnectionEndpoint toConnectionEndpoint() {
-		
+
+
+	@Override
+	public ConnectionEndpoint toEntity() {
 		ConnectionEndpoint point = new ConnectionEndpoint();
 		point.setMandatory(mandatory);
 		point.setObjectType(objectType);
@@ -40,6 +32,15 @@ public class ConnectionEndPointRep extends ResourceSupport implements Serializab
 		point.setRoleName(roleName);
 		
 		return point;
+	}
+
+	@Override
+	public void fromEntity(ConnectionEndpoint endpoint) {
+		mandatory = endpoint.getMandatory();
+		unique = endpoint.getUnique();
+		objectType = endpoint.getObjectType();
+		roleName = endpoint.getRoleName();
+		
 	}
 	
 	public Boolean getMandatory() {
@@ -66,7 +67,6 @@ public class ConnectionEndPointRep extends ResourceSupport implements Serializab
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
 	}
-
 	
 
 }

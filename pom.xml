@@ -39,8 +39,21 @@
 		<junit.version>4.11</junit.version>
 
 	</properties>
-	
+
 	<build>
+		<directory>target</directory>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+			</testResource>
+		</testResources>
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -54,7 +67,7 @@
 		</plugins>
 
 	</build>
-	
+
 	<dependencies>
 
 		<!-- Engine Jar file -->
@@ -71,11 +84,11 @@
 			<version>${spring-framework.version}</version>
 		</dependency>
 
-<dependency>
-  <groupId>org.springframework.hateoas</groupId>
-  <artifactId>spring-hateoas</artifactId>
-  <version>0.8.0.RELEASE</version>
-</dependency>
+		<dependency>
+			<groupId>org.springframework.hateoas</groupId>
+			<artifactId>spring-hateoas</artifactId>
+			<version>0.8.0.RELEASE</version>
+		</dependency>
 
 		<!-- Other Web dependencies -->
 		<dependency>
@@ -130,17 +143,17 @@
 			<scope>runtime</scope>
 		</dependency>
 
- <dependency>
-      <groupId>commons-fileupload</groupId>
-	  <artifactId>commons-fileupload</artifactId>
-      <version>1.2.1</version>
-    </dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.2.1</version>
+		</dependency>
 
- <dependency>
-      <groupId>commons-io</groupId>
-	  <artifactId>commons-io</artifactId>
-      <version>1.4</version>
-    </dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.4</version>
+		</dependency>
 
 		<!-- Hibernate -->
 		<dependency>
@@ -162,6 +175,31 @@
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
 			<scope>test</scope>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.3.0</version>
 		</dependency>
 
 	</dependencies>

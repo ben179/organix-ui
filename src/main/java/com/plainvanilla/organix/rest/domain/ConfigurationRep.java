@@ -5,13 +5,11 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.hateoas.ResourceSupport;
-
 import com.plainvanilla.organix.engine.model.Configuration;
 import com.plainvanilla.organix.engine.model.ConnectionType;
 import com.plainvanilla.organix.engine.model.ObjectType;
 
-public class ConfigurationRep extends ResourceSupport implements Serializable {
+public class ConfigurationRep extends OrganixRep<Configuration> implements Serializable {
 
 	private static final long serialVersionUID = 2L;
 
@@ -29,10 +27,31 @@ public class ConfigurationRep extends ResourceSupport implements Serializable {
 	}
 	
 	public ConfigurationRep(Configuration config) {
-		fromConfiguration(config);
+		fromEntity(config);
 	}
 	
-	public void fromConfiguration(Configuration config) {
+	@Override
+	public Configuration toEntity() {
+		Configuration c = new Configuration();
+		
+		c.setConfigurationDate(configurationDate);
+		c.setName(name);
+		c.setVersion(version);
+		c.setId(dbId);
+		
+		for (ConnectionTypeRep r : connectionTypes) {
+			c.addConnectionType(r.toEntity());
+		}
+		
+		for (ObjectTypeRep r : objectTypes) {
+			c.addObjectType(r.toEntity());
+		}
+		
+		return c;
+	}
+
+	@Override
+	public void fromEntity(Configuration config) {
 		dbId = config.getId();
 		configurationDate = config.getConfigurationDate();
 		lastUpdateDate = config.getLastUpdateDate();
@@ -48,26 +67,6 @@ public class ConfigurationRep extends ResourceSupport implements Serializable {
 		}
 	}
 	
-	public Configuration toConfiguration() {
-		
-		Configuration c = new Configuration();
-		
-		c.setConfigurationDate(configurationDate);
-		c.setName(name);
-		c.setVersion(version);
-		c.setId(dbId);
-		
-		for (ConnectionTypeRep r : connectionTypes) {
-			c.addConnectionType(r.toConnectionType());
-		}
-		
-		for (ObjectTypeRep r : objectTypes) {
-			c.addObjectType(r.toObjectType());
-		}
-		
-		return c;
-		
-	}
 	
 	public Long getDbId() {
 		return dbId;

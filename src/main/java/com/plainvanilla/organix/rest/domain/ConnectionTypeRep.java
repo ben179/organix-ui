@@ -6,7 +6,7 @@ import org.springframework.hateoas.ResourceSupport;
 
 import com.plainvanilla.organix.engine.model.ConnectionType;
 
-public class ConnectionTypeRep extends ResourceSupport implements Serializable {
+public class ConnectionTypeRep extends OrganixRep<ConnectionType> implements Serializable {
 
 
 	private static final long serialVersionUID = 3L;
@@ -21,25 +21,30 @@ public class ConnectionTypeRep extends ResourceSupport implements Serializable {
 	}
 	
 	public ConnectionTypeRep(ConnectionType type) {
-		fromConnectionType(type);
+		fromEntity(type);
 	}
 	
-	public void fromConnectionType(ConnectionType type) {
+	
+	@Override
+	public ConnectionType toEntity() {
+		ConnectionType type = new ConnectionType();
+		
+		type.setId(dbId);
+		type.setSourceEnd(sourceEnd.toEntity());
+		type.setTargetEnd(targetEnd.toEntity());
+		type.setTypeNumber(typeNumber);
+		return type;
+	}
+
+	@Override
+	public void fromEntity(ConnectionType type) {
 		dbId = type.getId();
 		typeNumber = type.getTypeNumber();
 		sourceEnd = new ConnectionEndPointRep(type.getSourceEnd());
 		targetEnd = new ConnectionEndPointRep(type.getTargetEnd());
 	}
 	
-	public ConnectionType toConnectionType() {
-		ConnectionType type = new ConnectionType();
-		
-		type.setId(dbId);
-		type.setSourceEnd(sourceEnd.toConnectionEndpoint());
-		type.setTargetEnd(targetEnd.toConnectionEndpoint());
-		type.setTypeNumber(typeNumber);
-		return type;
-	}
+	
 	
 	public Long getDbId() {
 		return dbId;
@@ -65,6 +70,6 @@ public class ConnectionTypeRep extends ResourceSupport implements Serializable {
 	public void setTargetEnd(ConnectionEndPointRep targetEnd) {
 		this.targetEnd = targetEnd;
 	}
-	
+
 	
 }

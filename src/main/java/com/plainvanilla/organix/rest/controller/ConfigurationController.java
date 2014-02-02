@@ -42,6 +42,7 @@ import com.plainvanilla.organix.engine.model.ObjectType;
 import com.plainvanilla.organix.engine.services.ConfigurationService;
 import com.plainvanilla.organix.rest.domain.ConfigurationRep;
 import com.plainvanilla.organix.rest.domain.ObjectTypeRep;
+import com.plainvanilla.organix.rest.domain.OrganixRep;
 
 
 @Controller
@@ -84,6 +85,16 @@ public class ConfigurationController {
 		return "\"" + md5(input) + "\"";
 	}
 	
+	
+	private static <T extends OrganixRep> ResponseEntity<T> setUpResponse(T representation, ControllerLinkBuilder selfLinkBuilder, HttpStatus status) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(selfLinkBuilder.toUri());
+		headers.setETag(getEtag(representation.toEntity()));
+
+		representation.add(selfLinkBuilder.withSelfRel());
+
+		return new ResponseEntity<T>(representation, headers, status);
+	}
 
 	
 	/* Object Types */
@@ -93,16 +104,16 @@ public class ConfigurationController {
 		
 		ObjectType type = configurationService.getObjectType(objId, configId);
 		
+		if (type == null) {
+			return new ResponseEntity<ObjectTypeRep>(null, null, HttpStatus.NOT_FOUND);
+		}
+		
 		ControllerLinkBuilder selfLinkBuilder = linkTo(methodOn(ConfigurationController.class).getObjectType(configId, objId));
 		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(selfLinkBuilder.toUri());
-		headers.setETag(getEtag(type));
-		
 		ObjectTypeRep representation = new ObjectTypeRep(type);
-		representation.add(selfLinkBuilder.withSelfRel());
 
-		return new ResponseEntity<ObjectTypeRep>(representation, headers, HttpStatus.OK);
+		return setUpResponse(representation, selfLinkBuilder, HttpStatus.OK);
+
 	}
 	
 	@RequestMapping(value="/{configId}/objectType/{objId}", method=RequestMethod.PUT)
@@ -119,22 +130,15 @@ public class ConfigurationController {
 			return new ResponseEntity<ObjectTypeRep>(null, null, HttpStatus.PRECONDITION_FAILED);
 		}
 		
-		ObjectType updated = configurationService.updateObjectType(type.toObjectType());
-				
 		ControllerLinkBuilder selfLinkBuilder = linkTo(methodOn(ConfigurationController.class).getObjectType(configId, objId));
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(selfLinkBuilder.toUri());
-		headers.setETag(getEtag(updated));
-		
+		ObjectType updated = configurationService.updateObjectType(type.toEntity());
 		ObjectTypeRep representation = new ObjectTypeRep(updated);
-		representation.add(selfLinkBuilder.withSelfRel());
-
-		return new ResponseEntity<ObjectTypeRep>(representation, headers, HttpStatus.OK);
+		
+		return setUpResponse(representation, selfLinkBuilder, HttpStatus.OK);
 	}
 
 	@RequestMapping(value="/{configId}/objectType/{objId}", method=RequestMethod.DELETE)
-	public ResponseEntity<ObjectTypeRep> updateObjectType(@PathVariable Long configId, @PathVariable Long objId, HttpServletRequest request) {
+	public ResponseEntity<ObjectTypeRep> deleteObjectType(@PathVariable Long configId, @PathVariable Long objId,  @RequestBody ObjectTypeRep type, HttpServletRequest request) {
 		
 		String etag = request.getHeader("If-Match");
 		if (etag == null) {
@@ -147,18 +151,12 @@ public class ConfigurationController {
 			return new ResponseEntity<ObjectTypeRep>(null, null, HttpStatus.PRECONDITION_FAILED);
 		}
 		
-		ObjectType updated = configurationService.updateObjectType(type.toObjectType());
+		ObjectType updated = configurationService.updateObjectType(type.toEntity());
 				
 		ControllerLinkBuilder selfLinkBuilder = linkTo(methodOn(ConfigurationController.class).getObjectType(configId, objId));
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(selfLinkBuilder.toUri());
-		headers.setETag(getEtag(updated));
-		
 		ObjectTypeRep representation = new ObjectTypeRep(updated);
-		representation.add(selfLinkBuilder.withSelfRel());
 
-		return new ResponseEntity<ObjectTypeRep>(representation, headers, HttpStatus.OK);
+		return setUpResponse(representation, selfLinkBuilder, HttpStatus.OK);
 	}
 	
 	
@@ -212,11 +210,20 @@ public class ConfigurationController {
 	}
 	
 	@RequestMapping(value="/{configId}", method=RequestMethod.GET)
-	public View getConfiguration(@PathVariable Long configId, Model model) {
+	public ResponseEntity<ConfigurationRep> getConfiguration(@PathVariable Long configId, Model model) {
 		Configuration config = configurationService.getConfiguration(configId);
-		model.addAttribute(config);
-		return configurationView;
+		
+		if (config == null) {
+			return new ResponseEntity<ConfigurationRep>(null, null, HttpStatus.NOT_FOUND);
+		}
+		
+		ControllerLinkBuilder selfLinkBuilder = linkTo(methodOn(ConfigurationController.class).getObjectType(configId, configId));
+		
+		ConfigurationRep representation = new ConfigurationRep(config);
+		return setUpResponse(representation, selfLinkBuilder, HttpStatus.OK);
 	}
+	
+
 
 	@RequestMapping(value="/{configId}/file", method=RequestMethod.GET)
 	public @ResponseBody void getConfigurationFile(@PathVariable Long configId, HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException {
@@ -246,7 +253,7 @@ public class ConfigurationController {
 	@RequestMapping(method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ConfigurationRep> uploadConfiguration(@RequestBody @Validated ConfigurationRep config, UriComponentsBuilder b) {
 		
-		Configuration uploaded = configurationService.importConfiguration(config.toConfiguration());
+		Configuration uploaded = configurationService.importConfiguration(config.toEntity());
 
 		UriComponents c = b.path("/configuration/{id}").buildAndExpand(uploaded.getId());
 		HttpHeaders headers = new HttpHeaders();

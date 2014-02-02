@@ -2,11 +2,9 @@ package com.plainvanilla.organix.rest.domain;
 
 import java.io.Serializable;
 
-import org.springframework.hateoas.ResourceSupport;
-
 import com.plainvanilla.organix.engine.model.ObjectType;
 
-public class ObjectTypeRep extends ResourceSupport implements Serializable {
+public class ObjectTypeRep extends OrganixRep<ObjectType> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -20,7 +18,7 @@ public class ObjectTypeRep extends ResourceSupport implements Serializable {
 	}
 		
 	public ObjectTypeRep(ObjectType type) {
-		fromObjectType(type);
+		fromEntity(type);
 	}
 	
 	
@@ -43,22 +41,23 @@ public class ObjectTypeRep extends ResourceSupport implements Serializable {
 		this.name = name;
 	}
 
-	public void fromObjectType(ObjectType type) {
-		dbId = type.getId();
-		name = type.getName();
-		typeNumber = type.getTypeNumber();		
-		configId = type.getConfiguration().getId();
-	}
-	
-	public ObjectType toObjectType() {
-		
+
+
+	@Override
+	public ObjectType toEntity() {
 		ObjectType type = new ObjectType();
 		type.setId(dbId);
 		type.setName(name);
 		type.setTypeNumber(typeNumber);
 				
 		return type;
-		
 	}
-	
+
+	@Override
+	public void fromEntity(ObjectType type) {
+		dbId = type.getId();
+		name = type.getName();
+		typeNumber = type.getTypeNumber();		
+		configId = type.getConfiguration().getId();
+	}	
 }
